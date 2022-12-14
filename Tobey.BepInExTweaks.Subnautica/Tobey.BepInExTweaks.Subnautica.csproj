@@ -8,6 +8,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
     <Copyright>Tobey Blaber 2022</Copyright>
+    <Product>BepInEx Tweaks</Product>
   </PropertyGroup>
 
   <ItemGroup>
