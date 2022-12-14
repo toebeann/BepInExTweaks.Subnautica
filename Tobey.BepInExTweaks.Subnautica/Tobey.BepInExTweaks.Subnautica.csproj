@@ -3,10 +3,11 @@
   <PropertyGroup>
     <TargetFramework>net472</TargetFramework>
     <AssemblyName>Tobey.BepInExTweaks.Subnautica</AssemblyName>
-    <Description>My first plugin</Description>
+    <Description>Useful tweaks for BepInEx in Subnautica.</Description>
     <Version>1.0.0</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
+    <Copyright>Tobey Blaber 2022</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
