@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33122.133
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tobey.BepInExTweaks.Subnautica", "Tobey.BepInExTweaks.Subnautica\Tobey.BepInExTweaks.Subnautica.csproj", "{7EE3A09B-E831-4AAC-B1E9-1D578C06E17A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tobey.BepInExTweaks.Subnautica", "Tobey.BepInExTweaks.Subnautica\Tobey.BepInExTweaks.Subnautica.csproj", "{7EE3A09B-E831-4AAC-B1E9-1D578C06E17A}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Tobey.BepInExExtensionMethods", "BepInExExtensionMethods\Tobey.BepInExExtensionMethods\Tobey.BepInExExtensionMethods.shproj", "{CEC654A1-CC7A-445E-B95B-345E9A04303F}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "BepInEx.ConfigurationManager", "BepInEx.ConfigurationManager\BepInEx.ConfigurationManager\BepInEx.ConfigurationManager.shproj", "{F9BC4E11-B6B8-478A-9D3A-D9A42DAF70D1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,5 +25,11 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D5831165-F5C0-48E8-AE3B-789E8C43ACCA}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		..\Tobey.BepInExExtensionMethods\Tobey.BepInExExtensionMethods\Tobey.BepInExExtensionMethods.projitems*{7ee3a09b-e831-4aac-b1e9-1d578c06e17a}*SharedItemsImports = 5
+		BepInEx.ConfigurationManager\BepInEx.ConfigurationManager\BepInEx.ConfigurationManager.projitems*{7ee3a09b-e831-4aac-b1e9-1d578c06e17a}*SharedItemsImports = 5
+		BepInExExtensionMethods\Tobey.BepInExExtensionMethods\Tobey.BepInExExtensionMethods.projitems*{cec654a1-cc7a-445e-b95b-345e9a04303f}*SharedItemsImports = 13
+		BepInEx.ConfigurationManager\BepInEx.ConfigurationManager\BepInEx.ConfigurationManager.projitems*{f9bc4e11-b6b8-478a-9d3a-d9a42daf70d1}*SharedItemsImports = 13
 	EndGlobalSection
 EndGlobal

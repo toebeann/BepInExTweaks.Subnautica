@@ -1,0 +1,6 @@
+[submodule "BepInEx.ConfigurationManager"]
+	path = BepInEx.ConfigurationManager
+	url = https://github.com/toebeann/BepInEx.ConfigurationManager
+[submodule "BepInExExtensionMethods"]
+	path = BepInExExtensionMethods
+	url = https://github.com/toebeann/BepInExExtensionMethods
