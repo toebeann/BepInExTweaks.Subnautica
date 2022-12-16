@@ -10,8 +10,8 @@ public class SceneCleanerTweaks : MonoBehaviour
 {
     public SceneCleanerPreserve SceneCleanerPreserve { get; private set; }
 
-    public List<GameObject> GameObjects => new() { Chainloader.ManagerObject, ThreadingHelper.Instance.gameObject };
-    private List<SceneCleanerPreserve> sceneCleanerPreserves;
+    public HashSet<GameObject> GameObjects => new() { Chainloader.ManagerObject, ThreadingHelper.Instance.gameObject };
+    private HashSet<SceneCleanerPreserve> sceneCleanerPreserves;
 
     private void OnEnable()
     {
