@@ -7,7 +7,6 @@ using System.Linq;
 using UnityEngine;
 using ByteSizeLib;
 using BepInEx.Configuration;
-using Oculus.Platform.Models;
 
 namespace Tobey.BepInExTweaks.Subnautica;
 [Tweak, DisallowMultipleComponent]
