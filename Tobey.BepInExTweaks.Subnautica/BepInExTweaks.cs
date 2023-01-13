@@ -1,9 +1,12 @@
 ﻿using BepInEx;
+using HarmonyLib;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using UnityEngine;
 
 namespace Tobey.BepInExTweaks.Subnautica;
-using static Config;
 
 [BepInDependency("com.bepis.bepinex.configurationmanager", BepInDependency.DependencyFlags.SoftDependency)]
 [BepInPlugin(PluginInfo.PLUGIN_GUID, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
@@ -12,13 +15,10 @@ public class BepInExTweaks : BaseUnityPlugin
 {
     public static BepInExTweaks Instance { get; private set; }
 
-    private static Lazy<Component> configurationManagerPlugin = new(() => Instance.GetPlugin("com.bepis.bepinex.configurationmanager"));
-    public static Component ConfigurationManagerPlugin => configurationManagerPlugin.Value;
-
-    public static bool HasConfigurationManager => ConfigurationManagerPlugin != null;
-
-    public ConfigurationManagerTweaks ConfigurationManagerTweaks { get; private set; }
     public SceneCleanerTweaks SceneCleanerTweaks { get; private set; }
+
+    private IEnumerable<MonoBehaviour> tweaks = Enumerable.Empty<MonoBehaviour>();
+    public List<MonoBehaviour> Tweaks => tweaks?.ToList();
 
     private void Awake()
     {
@@ -34,53 +34,26 @@ public class BepInExTweaks : BaseUnityPlugin
         }
     }
 
-    private void OnEnable()
-    {
-        AddTweaks();
-        Bind();
-    }
+    private void OnEnable() => AddTweaks();
 
-    private void AddTweaks()
+    private void AddTweaks() => ThreadingHelper.Instance.StartAsyncInvoke(() =>
     {
-        AddConfigurationManagerTweaks();
-        AddSceneCleanerTweaks();
-    }
+        var tweaks = GetAllTweaks();
+        return () => this.tweaks = tweaks.Select(type => gameObject.AddComponent(type) as MonoBehaviour).ToList();
+    });
+
+    private IEnumerable<Type> GetAllTweaks() => AccessTools.AllTypes()
+        .Where(type => (type.IsSubclassOf(typeof(MonoBehaviour)) || type.IsAssignableFrom(typeof(MonoBehaviour)))
+        && type.GetCustomAttribute<TweakAttribute>() is not null).ToHashSet();
 
     private void RemoveTweaks()
     {
-        Destroy(ConfigurationManagerTweaks);
-        Destroy(SceneCleanerTweaks);
-    }
-
-    private void Bind() => General.AddSceneCleanerPreserve.SettingChanged += AddSceneCleanerPreserve_SettingChanged;
-
-    private void Unbind() => General.AddSceneCleanerPreserve.SettingChanged -= AddSceneCleanerPreserve_SettingChanged;
-
-    private void AddConfigurationManagerTweaks()
-    {
-        if (HasConfigurationManager)
+        foreach (var tweak in Tweaks)
         {
-            ConfigurationManagerTweaks = gameObject.AddComponent<ConfigurationManagerTweaks>();
+            Destroy(tweak);
         }
+        tweaks = Enumerable.Empty<MonoBehaviour>();
     }
 
-    private void AddSceneCleanerTweaks()
-    {
-        if (General.AddSceneCleanerPreserve.Value)
-        {
-            SceneCleanerTweaks = gameObject.AddComponent<SceneCleanerTweaks>();
-        }
-        else
-        {
-            Destroy(SceneCleanerTweaks);
-        }
-    }
-
-    private void AddSceneCleanerPreserve_SettingChanged(object _, EventArgs __) => AddSceneCleanerTweaks();
-
-    private void OnDisable()
-    {
-        Unbind();
-        RemoveTweaks();
-    }
+    private void OnDisable() => RemoveTweaks();
 }

@@ -1,20 +1,27 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net472</TargetFramework>
     <AssemblyName>Tobey.BepInExTweaks.Subnautica</AssemblyName>
     <Description>Useful tweaks for BepInEx in Subnautica.</Description>
-    <Version>1.0.1</Version>
+    <Version>1.1</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
     <Copyright>Tobey Blaber 2022</Copyright>
     <Product>BepInEx Tweaks</Product>
   </PropertyGroup>
 
+  <Target Name="ZipBuild" AfterTargets="AfterBuild">
+    <Copy SourceFiles="$(OutputPath)\ByteSize.dll" DestinationFolder="$(OutputPath)\zip\plugins\$(Product)" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(OutputPath)\zip\plugins\$(Product)" />
+    <ZipDirectory SourceDirectory="$(OutputPath)\zip" DestinationFile="$(OutputPath)\$(Product).zip" Overwrite="true" />
+  </Target>
+
   <ItemGroup>
     <PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all" />
     <PackageReference Include="BepInEx.Core" Version="5.4.19" />
     <PackageReference Include="BepInEx.PluginInfoProps" Version="1.*" />
+    <PackageReference Include="ByteSize" Version="2.1.1" />
     <PackageReference Include="UnityEngine.Modules" Version="2019.4.36" IncludeAssets="compile" />
   </ItemGroup>
   

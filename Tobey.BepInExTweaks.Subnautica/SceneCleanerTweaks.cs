@@ -1,37 +1,71 @@
 ﻿using BepInEx;
 using BepInEx.Bootstrap;
+using BepInEx.Configuration;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Tobey.BepInExTweaks.Subnautica;
 
-[DisallowMultipleComponent]
+[Tweak, DisallowMultipleComponent]
 public class SceneCleanerTweaks : MonoBehaviour
 {
-    public SceneCleanerPreserve SceneCleanerPreserve { get; private set; }
-
     public HashSet<GameObject> GameObjects => new() { Chainloader.ManagerObject, ThreadingHelper.Instance.gameObject };
-    private HashSet<SceneCleanerPreserve> sceneCleanerPreserves;
+    public HashSet<SceneCleanerPreserve> SceneCleanerPreserves;
+
+    internal ConfigEntry<bool> AddSceneCleanerPreserve { get; } =
+            BepInExTweaks.Instance.Config.Bind(
+                section: "General",
+                key: "Preserve BepInEx runtime GameObjects",
+                defaultValue: true,
+                configDescription: new(
+                    description: "Prevents important BepInEx GameObjects from being destroyed when the game cleans the scene.",
+                    tags: new[] { new ConfigurationManagerAttributes { IsAdvanced = true } }
+                )
+            );
+
+    private void Awake()
+    {
+        AddSceneCleanerPreserve.SettingChanged += AddSceneCleanerPreserve_SettingChanged;
+        AddSceneCleanerPreserve_SettingChanged(this, null);
+    }
+
+    private void AddSceneCleanerPreserve_SettingChanged(object _, EventArgs __)
+    {
+        if (AddSceneCleanerPreserve.Value)
+        {
+            enabled = true;
+        }
+        else
+        {
+            enabled = false;
+        }
+    }
 
     private void OnEnable()
     {
-        sceneCleanerPreserves = new();
+        SceneCleanerPreserves = new();
         foreach (GameObject gameObject in GameObjects)
         {
             if (!gameObject.GetComponent<SceneCleanerPreserve>())
             {
-                sceneCleanerPreserves.Add(gameObject.AddComponent<SceneCleanerPreserve>());
+                SceneCleanerPreserves.Add(gameObject.AddComponent<SceneCleanerPreserve>());
             }
         }
     }
 
     private void OnDisable()
     {
-        foreach (SceneCleanerPreserve sceneCleanerPreserve in sceneCleanerPreserves)
+        foreach (SceneCleanerPreserve sceneCleanerPreserve in SceneCleanerPreserves)
         {
             Destroy(sceneCleanerPreserve);
         }
-        sceneCleanerPreserves.Clear();
-        sceneCleanerPreserves = null;
+        SceneCleanerPreserves.Clear();
+        SceneCleanerPreserves = null;
+    }
+
+    private void OnDestroy()
+    {
+        AddSceneCleanerPreserve.SettingChanged -= AddSceneCleanerPreserve_SettingChanged;
     }
 }
