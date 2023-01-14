@@ -50,8 +50,7 @@ public class FileTreeTweaks : MonoBehaviour
             .Where(dir => !new[] { "bepinex", "qmods" }.Contains(dir));
 
         var root = new FileTreeNode(Paths.GameRootPath, excludeDirs);
-        root.PrettyPrint(Logger.LogMessage);
-        return null;
+        return () => root.PrettyPrint(Logger.LogMessage);
     });
 
     public class FileTreeNode
