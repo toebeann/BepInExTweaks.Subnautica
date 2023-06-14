@@ -9,12 +9,9 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "BepInEx.ConfigurationManage
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7EE3A09B-E831-4AAC-B1E9-1D578C06E17A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7EE3A09B-E831-4AAC-B1E9-1D578C06E17A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7EE3A09B-E831-4AAC-B1E9-1D578C06E17A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7EE3A09B-E831-4AAC-B1E9-1D578C06E17A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection

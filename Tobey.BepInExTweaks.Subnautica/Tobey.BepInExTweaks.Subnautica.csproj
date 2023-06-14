@@ -4,17 +4,24 @@
     <TargetFramework>net472</TargetFramework>
     <AssemblyName>Tobey.BepInExTweaks.Subnautica</AssemblyName>
     <Description>Useful tweaks for BepInEx in Subnautica.</Description>
-    <Version>1.1.1</Version>
+    <Version>1.2.0</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
-    <Copyright>Tobey Blaber 2022</Copyright>
+    <Copyright>Copyright © Tobey Blaber 2022</Copyright>
     <Product>BepInEx Tweaks</Product>
+    <Configurations>Release</Configurations>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <DebugType>none</DebugType>
   </PropertyGroup>
 
-  <Target Name="ZipBuild" AfterTargets="AfterBuild">
-    <Copy SourceFiles="$(OutputPath)\ByteSize.dll" DestinationFolder="$(OutputPath)\zip\plugins\$(Product)" />
-    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(OutputPath)\zip\plugins\$(Product)" />
-    <ZipDirectory SourceDirectory="$(OutputPath)\zip" DestinationFile="$(OutputPath)\$(Product).zip" Overwrite="true" />
+  <Target Name="CleanZip" AfterTargets="AfterClean">
+    <Delete Files="..\bin\$(RootNamespace).zip;..\bin\zip\BepInEx\plugins\Tobey\$(Product)\$(TargetFileName)" />
+  </Target>
+
+  <Target Name="BuildZip" AfterTargets="AfterBuild">
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="..\bin\zip\BepInEx\plugins\Tobey\$(Product)\" />
+    <ZipDirectory SourceDirectory="..\bin\zip\" DestinationFile="..\bin\$(RootNamespace).zip" Overwrite="true" />
   </Target>
 
   <ItemGroup>
@@ -22,6 +29,11 @@
     <PackageReference Include="BepInEx.Core" Version="5.4.19" />
     <PackageReference Include="BepInEx.PluginInfoProps" Version="1.*" />
     <PackageReference Include="ByteSize" Version="2.1.1" />
+    <PackageReference Include="Fody" Version="6.7.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="ILMerge.Fody" Version="1.24.0" PrivateAssets="all" />
     <PackageReference Include="UnityEngine.Modules" Version="2019.4.36" IncludeAssets="compile" />
   </ItemGroup>
   
