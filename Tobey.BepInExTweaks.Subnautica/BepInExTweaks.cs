@@ -9,13 +9,12 @@ using UnityEngine;
 namespace Tobey.BepInExTweaks.Subnautica;
 
 [BepInDependency("com.bepis.bepinex.configurationmanager", BepInDependency.DependencyFlags.SoftDependency)]
+[BepInDependency("Tobey.FileTree", BepInDependency.DependencyFlags.SoftDependency)]
 [BepInPlugin(PluginInfo.PLUGIN_GUID, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
 [DisallowMultipleComponent]
 public class BepInExTweaks : BaseUnityPlugin
 {
     public static BepInExTweaks Instance { get; private set; }
-
-    public SceneCleanerTweaks SceneCleanerTweaks { get; private set; }
 
     private IEnumerable<MonoBehaviour> tweaks = Enumerable.Empty<MonoBehaviour>();
     public List<MonoBehaviour> Tweaks => tweaks?.ToList();

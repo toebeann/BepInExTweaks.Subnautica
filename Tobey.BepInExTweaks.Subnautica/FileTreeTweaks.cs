@@ -1,12 +1,13 @@
 ﻿using BepInEx;
+using BepInEx.Bootstrap;
+using BepInEx.Configuration;
 using BepInEx.Logging;
+using ByteSizeLib;
 using System.Collections.Generic;
 using System;
 using System.IO;
 using System.Linq;
 using UnityEngine;
-using ByteSizeLib;
-using BepInEx.Configuration;
 
 namespace Tobey.BepInExTweaks.Subnautica;
 [Tweak, DisallowMultipleComponent]
@@ -31,17 +32,14 @@ public class FileTreeTweaks : MonoBehaviour
         LogFileTree_SettingChanged(this, null);
     }
 
-    private void LogFileTree_SettingChanged(object _, EventArgs __)
+    private BaseUnityPlugin FileTreeLogger => Chainloader.PluginInfos.TryGetValue("Tobey.FileTree", out var pluginInfo) switch
     {
-        if (LogFileTree.Value)
-        {
-            enabled = true;
-        }
-        else
-        {
-            enabled = false;
-        }
-    }
+        true when pluginInfo.Instance is BaseUnityPlugin fileTreeLogger => fileTreeLogger,
+        _ => null
+    };
+    private void LogFileTree_SettingChanged(object _, EventArgs __) =>
+        enabled = LogFileTree.Value &&
+        (FileTreeLogger is not BaseUnityPlugin fileTreeLogger || !fileTreeLogger.enabled);
 
     private void OnEnable() => ThreadingHelper.Instance.StartAsyncInvoke(() =>
     {
@@ -130,7 +128,7 @@ public class FileTreeTweaks : MonoBehaviour
             if (!IsRoot)
             {
                 output += last
-                    ? "\\-- "
+                    ? @"\-- "
                     : "|-- ";
             }
 
