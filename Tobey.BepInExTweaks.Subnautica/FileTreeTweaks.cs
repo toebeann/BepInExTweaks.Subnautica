@@ -10,7 +10,7 @@ using System.Linq;
 using UnityEngine;
 
 namespace Tobey.BepInExTweaks.Subnautica;
-[Tweak, DisallowMultipleComponent]
+[DisallowMultipleComponent]
 public class FileTreeTweaks : MonoBehaviour
 {
     private readonly ManualLogSource Logger = BepInEx.Logging.Logger.CreateLogSource("File Tree");

@@ -1,9 +1,7 @@
 ﻿using BepInEx;
-using HarmonyLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using UnityEngine;
 
 namespace Tobey.BepInExTweaks.Subnautica;
@@ -16,8 +14,13 @@ public class BepInExTweaks : BaseUnityPlugin
 {
     public static BepInExTweaks Instance { get; private set; }
 
-    private IEnumerable<MonoBehaviour> tweaks = Enumerable.Empty<MonoBehaviour>();
-    public List<MonoBehaviour> Tweaks => tweaks?.ToList();
+    public HashSet<Type> TweakTypes { get; } = new(new[]
+    {
+        typeof(FileTreeTweaks),
+        typeof(SceneCleanerTweaks)
+    });
+
+    public HashSet<MonoBehaviour> Tweaks { get; } = new();
 
     private void Awake()
     {
@@ -33,26 +36,17 @@ public class BepInExTweaks : BaseUnityPlugin
         }
     }
 
-    private void OnEnable() => AddTweaks();
-
-    private void AddTweaks() => ThreadingHelper.Instance.StartAsyncInvoke(() =>
+    private void OnEnable() => ThreadingHelper.Instance.StartAsyncInvoke(() =>
     {
-        var tweaks = GetAllTweaks();
-        return () => this.tweaks = tweaks.Select(type => gameObject.AddComponent(type) as MonoBehaviour).ToList();
+        return () => TweakTypes
+            .Select(type => gameObject.AddComponent(type) as MonoBehaviour)
+            .AsParallel()
+            .ForAll((tweak) => Tweaks.Add(tweak));
     });
 
-    private IEnumerable<Type> GetAllTweaks() => AccessTools.AllTypes()
-        .Where(type => (type.IsSubclassOf(typeof(MonoBehaviour)) || type.IsAssignableFrom(typeof(MonoBehaviour)))
-        && type.GetCustomAttribute<TweakAttribute>() is not null).ToHashSet();
-
-    private void RemoveTweaks()
+    private void OnDisable()
     {
-        foreach (var tweak in Tweaks)
-        {
-            Destroy(tweak);
-        }
-        tweaks = Enumerable.Empty<MonoBehaviour>();
+        Tweaks.AsParallel().ForAll(Destroy);
+        Tweaks.Clear();
     }
-
-    private void OnDisable() => RemoveTweaks();
 }

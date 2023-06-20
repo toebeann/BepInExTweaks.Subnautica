@@ -4,14 +4,12 @@
     <TargetFramework>net472</TargetFramework>
     <AssemblyName>Tobey.BepInExTweaks.Subnautica</AssemblyName>
     <Description>Useful tweaks for BepInEx in Subnautica.</Description>
-    <Version>1.2.0</Version>
+    <Version>1.2.1</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
     <Copyright>Copyright © Tobey Blaber 2022</Copyright>
     <Product>BepInEx Tweaks</Product>
     <Configurations>Release</Configurations>
-    <AssemblyVersion>1.0.0.0</AssemblyVersion>
-    <FileVersion>1.0.0.0</FileVersion>
     <DebugType>none</DebugType>
   </PropertyGroup>
 

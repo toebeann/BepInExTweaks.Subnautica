@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Tobey.BepInExTweaks.Subnautica;
 
-[Tweak, DisallowMultipleComponent]
+[DisallowMultipleComponent]
 public class SceneCleanerTweaks : MonoBehaviour
 {
     public HashSet<GameObject> GameObjects => new() { Chainloader.ManagerObject, ThreadingHelper.Instance.gameObject };
